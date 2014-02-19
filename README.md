@@ -92,6 +92,41 @@ The modules that I wrote for this lab are listed below complete with examples an
 
 ```
 
+ * `pong_control` - This VHDL module includes all of the functinality required to move the paddle up and down and to move the ball accordingly. The process depicting this functionality can be seen in the code below:
+
+```vhdl
+	process(reset, clk, paddle_y_reg, ball_x_reg, ball_y_reg, v_completed, running, delay_reg) is
+	begin
+		if(reset = '1') then
+			ball_x_dir <= '1';
+			ball_y_dir <= '1';
+			running <= '1';
+		elsif(rising_edge(clk) and running = '1') then
+			if(hit_paddle = '1') then
+				ball_x_dir <= '1';
+			else 
+				if(ball_x_reg > 635) then
+					ball_x_dir <= '0';
+				elsif(ball_x_reg <= 7) then
+					running <= '0';
+				else
+					ball_x_dir <= ball_x_dir;
+				end if;
+				if(ball_y_reg < 5) then
+					ball_y_dir <= '1';
+				elsif(ball_y_reg > 475) then
+					ball_y_dir <= '0';
+				else
+					ball_y_dir <= ball_y_dir;
+				end if;
+			end if;
+		else
+			ball_y_dir <= ball_y_dir;
+			ball_x_dir <= ball_x_dir;
+			running <= running;
+		end if;
+	end process;	
+```
 
 ### Test/Debug
 
